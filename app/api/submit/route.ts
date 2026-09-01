@@ -17,6 +17,7 @@ const DEFAULT_HEADERS = [
   'College Email ID',
   'LinkedIn ID',
   'GitHub ID',
+  'Instagram ID',
   'Interest Skills',
 ];
 
@@ -50,6 +51,7 @@ export async function POST(req: Request) {
       email,
       linkedinId,
       githubId,
+      instagramId,
       interests,
     } = body;
 
@@ -214,6 +216,11 @@ export async function POST(req: Request) {
 
       'githubid': githubId ? githubId.trim() : 'N/A',
       'github': githubId ? githubId.trim() : 'N/A',
+
+      'instagramid': instagramId ? instagramId.trim() : 'N/A',
+      'instagram': instagramId ? instagramId.trim() : 'N/A',
+      'instaid': instagramId ? instagramId.trim() : 'N/A',
+      'insta': instagramId ? instagramId.trim() : 'N/A',
 
       'interestskills': interests ? interests.trim() : 'N/A',
       'interests': interests ? interests.trim() : 'N/A',

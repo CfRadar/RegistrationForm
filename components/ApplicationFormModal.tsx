@@ -12,6 +12,7 @@ export interface ApplicationFormData {
   email: string;
   linkedinId: string;
   githubId?: string;
+  instagramId?: string;
   interests: string;
 }
 
@@ -176,7 +177,7 @@ export default function ApplicationFormModal({ isOpen, onClose, data }: Applicat
               </div>
             </div>
 
-            {/* 9 Form Fields Grid */}
+            {/* Form Fields Grid */}
             <div className="space-y-4 text-xs sm:text-sm font-medium leading-relaxed">
               
               {/* 1. Enrollment Number */}
@@ -243,9 +244,17 @@ export default function ApplicationFormModal({ isOpen, onClose, data }: Applicat
                 </span>
               </div>
 
-              {/* 9. Interest & Skills */}
+              {/* 9. Instagram ID */}
               <div className="flex items-baseline border-b border-gray-300 pb-1.5">
-                <span className="font-bold min-w-[180px] text-black">9. Interest & Skills:</span>
+                <span className="font-bold min-w-[180px] text-black">9. Instagram ID (if any):</span>
+                <span className="flex-1 font-semibold text-black break-all">
+                  {data.instagramId || 'N/A (Not Provided)'}
+                </span>
+              </div>
+
+              {/* 10. Interest & Skills */}
+              <div className="flex items-baseline border-b border-gray-300 pb-1.5">
+                <span className="font-bold min-w-[180px] text-black">10. Interest & Skills:</span>
                 <span className="flex-1 font-semibold text-black">
                   {data.interests || 'N/A'}
                 </span>

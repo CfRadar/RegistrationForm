@@ -35,6 +35,7 @@ export default function RegistrationPage() {
     email: '',
     linkedinId: '',
     githubId: '',
+    instagramId: '',
     interests: '',
     otherInterest: '',
   });
@@ -199,6 +200,7 @@ export default function RegistrationPage() {
           email: form.email.trim(),
           linkedinId: form.linkedinId.trim(),
           githubId: form.githubId.trim(),
+          instagramId: form.instagramId.trim(),
           interests: finalInterests,
         }),
       });
@@ -215,6 +217,7 @@ export default function RegistrationPage() {
           email: form.email.trim(),
           linkedinId: form.linkedinId.trim(),
           githubId: form.githubId.trim(),
+          instagramId: form.instagramId.trim(),
           interests: finalInterests,
         };
         setStatus('success');
@@ -514,6 +517,21 @@ export default function RegistrationPage() {
                     onFocus={handleFieldInteraction}
                     onChange={(e) => setForm({ ...form, githubId: e.target.value })}
                     placeholder={t.form.githubPlaceholder}
+                    className="w-full p-4 rounded-2xl bg-[#e6edf5] neu-input text-[#0B1B3D] placeholder:text-[#475569]/40 outline-none text-sm font-medium"
+                  />
+                </div>
+
+                {/* 9. Instagram ID (if any) */}
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-[#0B1B3D] uppercase tracking-wider ml-1">
+                    {t.form.instagramLabel}
+                  </label>
+                  <input
+                    type="text"
+                    value={form.instagramId}
+                    onFocus={handleFieldInteraction}
+                    onChange={(e) => setForm({ ...form, instagramId: e.target.value })}
+                    placeholder={t.form.instagramPlaceholder}
                     className="w-full p-4 rounded-2xl bg-[#e6edf5] neu-input text-[#0B1B3D] placeholder:text-[#475569]/40 outline-none text-sm font-medium"
                   />
                 </div>

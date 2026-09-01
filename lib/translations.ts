@@ -37,6 +37,8 @@ export interface TranslationSchema {
     linkedinPlaceholder: string;
     githubLabel: string;
     githubPlaceholder: string;
+    instagramLabel: string;
+    instagramPlaceholder: string;
     interestsLabel: string;
     interestsPlaceholder: string;
     otherInterestLabel: string;
@@ -108,6 +110,8 @@ export const translations: Record<Language, TranslationSchema> = {
       linkedinPlaceholder: 'https://linkedin.com/in/username',
       githubLabel: 'GitHub ID / Profile URL (if any)',
       githubPlaceholder: 'https://github.com/username (Optional)',
+      instagramLabel: 'Instagram ID / Handle (if any)',
+      instagramPlaceholder: '@username or profile link (Optional)',
       interestsLabel: 'Interest & Skills',
       interestsPlaceholder: 'Select your primary interest/skill',
       otherInterestLabel: 'Specify Other Skill / Interest',
@@ -126,8 +130,7 @@ export const translations: Record<Language, TranslationSchema> = {
         { value: 'Mech', label: 'Mechanical (Mech)' },
         { value: 'Civil', label: 'Civil' },
         { value: 'CSBS', label: 'Computer Science & Business System (CSBS)' },
-        { value: 'IP', label: 'Industrial & Production (IP)' },
-        { value: 'MTech', label: 'M.Tech' },
+        { value: 'B.Design', label: 'Bachelor of Design (B.Design)' },
         { value: 'Other', label: 'Other' },
       ],
       genders: [
@@ -204,6 +207,8 @@ export const translations: Record<Language, TranslationSchema> = {
       linkedinPlaceholder: 'https://linkedin.com/in/username',
       githubLabel: 'गिटहब आईडी / प्रोफाइल यूआरएल (यदि हो तो)',
       githubPlaceholder: 'https://github.com/username (वैकल्पिक)',
+      instagramLabel: 'इंस्टाग्राम आईडी / हैंडल (यदि हो तो)',
+      instagramPlaceholder: '@username या प्रोफाइल लिंक (वैकल्पिक)',
       interestsLabel: 'अभिरुचि एवं कौशल',
       interestsPlaceholder: 'अपनी प्राथमिक अभिरुचि/कौशल चुनें',
       otherInterestLabel: 'अन्य कौशल / अभिरुचि दर्ज करें',
@@ -222,8 +227,7 @@ export const translations: Record<Language, TranslationSchema> = {
         { value: 'Mech', label: 'मैकेनिकल (Mech)' },
         { value: 'Civil', label: 'सिविल (Civil)' },
         { value: 'CSBS', label: 'कंप्यूटर साइंस एंड बिजनेस सिस्टम (CSBS)' },
-        { value: 'IP', label: 'इंडस्ट्रियल एंड प्रोडक्शन (IP)' },
-        { value: 'MTech', label: 'एम.टेक (M.Tech)' },
+        { value: 'B.Design', label: 'बैचलर ऑफ डिजाइन (B.Design)' },
         { value: 'Other', label: 'अन्य' },
       ],
       genders: [
