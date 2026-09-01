@@ -59,12 +59,13 @@ export default function RegistrationPage() {
     }
   }, []);
 
-  // Sync Google Auth email into form email field if empty
+  // Sync Google Auth email into form email field ONLY IF it is an official college email
   useEffect(() => {
     if (user?.email) {
+      const isCollegeEmail = user.email.toLowerCase().endsWith('@ietdavv.edu.in') || user.email.toLowerCase().endsWith('@davv.ac.in');
       setForm((prev) => ({
         ...prev,
-        email: prev.email || user.email,
+        email: prev.email ? prev.email : (isCollegeEmail ? user.email : ''),
         name: prev.name || user.name || '',
       }));
     }
