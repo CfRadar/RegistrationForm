@@ -70,7 +70,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const formattedContactNo = contactNo.startsWith('+91') ? contactNo : `+91 ${cleanPhone.slice(-10)}`;
+    const rawPhone = contactNo.startsWith('+91') ? contactNo : `+91 ${cleanPhone.slice(-10)}`;
+    const formattedContactNo = `'${rawPhone}`;
 
     // Check environment configuration
     if (!GOOGLE_CLIENT_EMAIL || !GOOGLE_PRIVATE_KEY || !SPREADSHEET_ID) {
