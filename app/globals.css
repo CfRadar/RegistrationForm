@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+:root {
+  --bg-neu: #e6edf5;
+  --shadow-dark: #c2cfd6;
+  --shadow-light: #ffffff;
+  
+  --nss-navy: #0B1B3D;
+  --nss-navy-light: #162B56;
+  --nss-red: #D90429;
+  --nss-red-dark: #A7001E;
+  --nss-gold: #FFB703;
+  --nss-gold-dark: #D49200;
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+}
+
+body {
+  background-color: var(--bg-neu);
+  color: var(--text-primary);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom Datepicker Indicator styling */
+input[type="date"] {
+  color-scheme: light;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(12%) sepia(50%) saturate(3000%) hue-rotate(200deg) brightness(90%) contrast(100%);
+  padding: 4px;
+}
+
+/* Neumorphic Flat Surface (Card) */
+.neu-card {
+  background: var(--bg-neu);
+  box-shadow: 14px 14px 28px #c5d0e0, -14px -14px 28px #ffffff;
+  border-radius: 32px;
+}
+
+/* Neumorphic Small Card / Button */
+.neu-badge {
+  background: var(--bg-neu);
+  box-shadow: 6px 6px 14px #c5d0e0, -6px -6px 14px #ffffff;
+  border-radius: 9999px;
+}
+
+/* Neumorphic Pressed / Inset Input */
+.neu-input {
+  background: var(--bg-neu);
+  box-shadow: inset 5px 5px 10px #c5d0e0, inset -5px -5px 10px #ffffff;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transition: all 0.25s ease;
+}
+
+.neu-input:focus, .neu-input:focus-within {
+  box-shadow: inset 7px 7px 14px #b8c4d6, inset -7px -7px 14px #ffffff;
+  border-color: var(--nss-navy);
+}
+
+/* Neumorphic Active Button */
+.neu-btn-primary {
+  background: linear-gradient(145deg, #0d214a, #091530);
+  color: #ffffff;
+  box-shadow: 8px 8px 18px #b8c4d6, -8px -8px 18px #ffffff;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+}
+
+.neu-btn-primary:hover {
+  box-shadow: 10px 10px 22px #b8c4d6, -10px -10px 22px #ffffff;
+  transform: translateY(-1px);
+}
+
+.neu-btn-primary:active {
+  box-shadow: inset 4px 4px 8px #050b1a, inset -4px -4px 8px #132b5e;
+  transform: translateY(1px);
+}
+
+/* Neumorphic Knob / Circle */
+.neu-knob {
+  background: linear-gradient(145deg, #ffffff, #dce4f0);
+  box-shadow: 3px 3px 6px #bac6d8, -3px -3px 6px #ffffff;
+}
+
+/* NSS Logo Animated Chakra Spin & Pulse keyframes */
+@keyframes spinSlow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes spinReverseSlow {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes pulseLogo {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255, 183, 3, 0.3)); }
+  50% { transform: scale(1.06); filter: drop-shadow(0 0 25px rgba(217, 4, 41, 0.5)); }
+}
+
+.animate-spin-slow {
+  animation: spinSlow 8s linear infinite;
+}
+
+.animate-spin-reverse-slow {
+  animation: spinReverseSlow 6s linear infinite;
+}
+
+.animate-pulse-logo {
+  animation: pulseLogo 3s ease-in-out infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-neu);
+}
+::-webkit-scrollbar-thumb {
+  background: #c5d0e0;
+  border-radius: 9999px;
+  border: 2px solid var(--bg-neu);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--nss-navy);
+}
