@@ -4,22 +4,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import GoogleAuthModal from '@/components/GoogleAuthModal';
 import NssLogoLoader from '@/components/NssLogoLoader';
 import CustomSelect from '@/components/CustomSelect';
 import ApplicationFormModal, { ApplicationFormData } from '@/components/ApplicationFormModal';
 import { translations, Language } from '@/lib/translations';
 
-interface UserSession {
-  email: string;
-  name?: string;
-  picture?: string;
-}
-
 export default function RegistrationPage() {
   const [lang, setLang] = useState<Language>('en');
-  const [user, setUser] = useState<UserSession | null>(null);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [status, setStatus] = useState<'idle' | 'checking' | 'submitting' | 'success' | 'already_submitted'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
   const [draftSaved, setDraftSaved] = useState(false);
@@ -43,62 +34,33 @@ export default function RegistrationPage() {
   const t = translations[lang];
   const autosaveTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Auto check session from localStorage on mount & auto-prompt Google login on phone/Chrome
+  // Load saved local draft on mount if available
   useEffect(() => {
-    const savedUser = localStorage.getItem('gdgoc_user_session');
-    if (savedUser) {
+    const localDraft = localStorage.getItem('gdgoc_draft_form');
+    if (localDraft) {
       try {
-        const parsed = JSON.parse(savedUser);
-        setUser(parsed);
-        checkSubmissionStatusAndLoadDraft(parsed.email);
-      } catch (e) {
-        localStorage.removeItem('gdgoc_user_session');
-      }
-    } else {
-      setIsAuthModalOpen(true);
+        const parsed = JSON.parse(localDraft);
+        setForm((prev) => ({ ...prev, ...parsed }));
+      } catch (e) {}
     }
   }, []);
 
-  // Sync Google Auth email into form email field ONLY IF it is an official college email
+  // Debounced local autosave
   useEffect(() => {
-    if (user?.email) {
-      const isCollegeEmail = user.email.toLowerCase().endsWith('@ietdavv.edu.in') || user.email.toLowerCase().endsWith('@davv.ac.in');
-      setForm((prev) => ({
-        ...prev,
-        email: prev.email ? prev.email : (isCollegeEmail ? user.email : ''),
-        name: prev.name || user.name || '',
-      }));
-    }
-  }, [user]);
+    if (status === 'success' || status === 'already_submitted') return;
 
-  // Debounced Autosave (Local & Cloud across devices)
-  useEffect(() => {
-    if (!user?.email || status === 'success' || status === 'already_submitted') return;
-
-    const hasData = Object.entries(form).some(([key, val]) => key !== 'email' && Boolean(val.trim()));
+    const hasData = Object.entries(form).some(([key, val]) => Boolean(val.trim()));
     if (!hasData) return;
 
-    localStorage.setItem(`gdgoc_draft_${user.email}`, JSON.stringify(form));
+    localStorage.setItem('gdgoc_draft_form', JSON.stringify(form));
     setDraftSaved(true);
+  }, [form, status]);
 
-    if (autosaveTimerRef.current) clearTimeout(autosaveTimerRef.current);
-    autosaveTimerRef.current = setTimeout(() => {
-      fetch('/api/draft', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: user.email, draftData: form }),
-      }).catch((err) => console.error('Cloud draft autosave error:', err));
-    }, 1500);
-
-    return () => {
-      if (autosaveTimerRef.current) clearTimeout(autosaveTimerRef.current);
-    };
-  }, [form, user, status]);
-
-  const checkSubmissionStatusAndLoadDraft = async (email: string) => {
+  const checkSubmissionStatus = async (emailToCheck: string) => {
+    if (!emailToCheck || !emailToCheck.includes('@')) return;
     setStatus('checking');
     try {
-      const res = await fetch(`/api/check-submission?email=${encodeURIComponent(email)}`);
+      const res = await fetch(`/api/check-submission?email=${encodeURIComponent(emailToCheck)}`);
       const data = await res.json();
 
       if (data.submitted) {
@@ -108,30 +70,9 @@ export default function RegistrationPage() {
         }
         return;
       }
-
-      // Load draft from localStorage first (fast)
-      const localDraft = localStorage.getItem(`gdgoc_draft_${email}`);
-      if (localDraft) {
-        try {
-          const parsedLocal = JSON.parse(localDraft);
-          setForm((prev) => ({ ...prev, ...parsedLocal }));
-        } catch (e) {}
-      }
-
-      // Fetch saved draft from Cloud Google Sheet
-      const draftRes = await fetch(`/api/draft?email=${encodeURIComponent(email)}`);
-      const draftData = await draftRes.json();
-      if (draftData.draft) {
-        setForm((prev) => ({
-          ...prev,
-          ...draftData.draft,
-        }));
-        localStorage.setItem(`gdgoc_draft_${email}`, JSON.stringify(draftData.draft));
-      }
-      
       setStatus('idle');
     } catch (err) {
-      console.error('Failed to check submission or load draft', err);
+      console.error('Failed to check submission', err);
       setStatus('idle');
     }
   };
@@ -140,31 +81,9 @@ export default function RegistrationPage() {
     setLang((prev) => (prev === 'en' ? 'hi' : 'en'));
   };
 
-  const handleFieldInteraction = () => {
-    if (!user) {
-      setIsAuthModalOpen(true);
-    }
-  };
-
-  const handleGoogleSuccess = (userData: UserSession) => {
-    setUser(userData);
-    localStorage.setItem('gdgoc_user_session', JSON.stringify(userData));
-    setIsAuthModalOpen(false);
-    checkSubmissionStatusAndLoadDraft(userData.email);
-  };
-
-  const handleSwitchAccount = () => {
-    setIsAuthModalOpen(true);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
-
-    if (!user) {
-      setIsAuthModalOpen(true);
-      return;
-    }
 
     // Phone number digit validation
     const cleanPhone = form.contactNo.replace(/\D/g, '');
@@ -192,7 +111,7 @@ export default function RegistrationPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          googleEmail: user.email,
+          googleEmail: form.email.trim(),
           enrollmentNo: form.enrollmentNo.trim(),
           name: form.name.trim(),
           branch: form.branch,
@@ -223,8 +142,7 @@ export default function RegistrationPage() {
         };
         setStatus('success');
         setSubmittedData(finalSubmissionData);
-        localStorage.removeItem(`gdgoc_draft_${user.email}`);
-        fetch(`/api/draft?email=${encodeURIComponent(user.email)}`, { method: 'DELETE' }).catch(() => {});
+        localStorage.removeItem('gdgoc_draft_form');
       } else if (res.status === 409 || data.error === 'ALREADY_SUBMITTED') {
         setStatus('already_submitted');
       } else {
@@ -246,8 +164,6 @@ export default function RegistrationPage() {
         lang={lang}
         onToggleLang={handleToggleLang}
         t={t}
-        user={user}
-        onSwitchAccount={handleSwitchAccount}
       />
 
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-6 sm:px-8 sm:py-10 flex flex-col justify-center">
@@ -325,7 +241,7 @@ export default function RegistrationPage() {
             <p className="text-sm sm:text-base text-[#475569] max-w-lg mx-auto leading-relaxed mb-8 font-medium">
               {t.status.alreadySubmittedMsg}
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex items-center justify-center">
               <button
                 onClick={() => setIsFormModalOpen(true)}
                 className="px-6 py-3.5 rounded-full bg-[#D90429] text-white text-xs uppercase tracking-widest font-black transition neu-btn-primary cursor-pointer shadow-lg hover:scale-105 flex items-center justify-center space-x-2"
@@ -335,42 +251,20 @@ export default function RegistrationPage() {
                 </svg>
                 <span>{t.status.downloadFormBtn}</span>
               </button>
-              <button
-                onClick={handleSwitchAccount}
-                className="px-6 py-3.5 rounded-full bg-[#0B1B3D] text-white text-xs uppercase tracking-widest font-black transition neu-btn-primary cursor-pointer"
-              >
-                {t.status.switchAccountBtn}
-              </button>
             </div>
           </div>
         ) : (
           /* Main Neumorphic Registration Form Card */
           <div className="bg-[#e6edf5] p-6 sm:p-10 rounded-3xl neu-card shadow-[18px_18px_40px_#beccd9,-18px_-18px_40px_#ffffff] border border-white/80 relative">
             
-            {!user ? (
-              <div 
-                onClick={() => setIsAuthModalOpen(true)}
-                className="mb-6 p-4 rounded-2xl bg-[#e6edf5] neu-card shadow-[6px_6px_12px_#c2cfd6,-6px_-6px_12px_#ffffff] border border-[#FFB703]/80 flex items-center justify-between cursor-pointer hover:scale-[1.01] transition group"
-              >
-                <div className="flex items-center space-x-3">
-                  <span className="w-3 h-3 rounded-full bg-[#D90429] animate-ping" />
-                  <p className="text-xs sm:text-sm font-bold text-[#0B1B3D]">
-                    {t.header.loginRequiredNotice}
-                  </p>
-                </div>
-                <span className="text-xs bg-[#0B1B3D] text-[#FFB703] px-3.5 py-1.5 rounded-full font-black uppercase tracking-wider group-hover:scale-105 transition shadow-sm">
-                  Login
-                </span>
-              </div>
-            ) : draftSaved ? (
+            {draftSaved && (
               <div className="mb-6 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 text-xs font-bold flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>Draft auto-saved across devices</span>
+                  <span>Draft auto-saved locally</span>
                 </div>
-                <span className="text-[10px] text-emerald-600/80 font-normal">Synced with Google Account</span>
               </div>
-            ) : null}
+            )}
 
             {/* General Error Message Alert */}
             {errorMessage && (
@@ -395,7 +289,6 @@ export default function RegistrationPage() {
                     required
                     type="text"
                     value={form.enrollmentNo}
-                    onFocus={handleFieldInteraction}
                     onChange={(e) => setForm({ ...form, enrollmentNo: e.target.value })}
                     placeholder={t.form.enrollmentNoPlaceholder}
                     className="w-full p-4 rounded-2xl bg-[#e6edf5] neu-input text-[#0B1B3D] placeholder:text-[#475569]/40 outline-none text-sm font-medium uppercase"
@@ -411,7 +304,6 @@ export default function RegistrationPage() {
                     required
                     type="text"
                     value={form.name}
-                    onFocus={handleFieldInteraction}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     placeholder={t.form.namePlaceholder}
                     className="w-full p-4 rounded-2xl bg-[#e6edf5] neu-input text-[#0B1B3D] placeholder:text-[#475569]/40 outline-none text-sm font-medium"
@@ -429,7 +321,6 @@ export default function RegistrationPage() {
                     onChange={(val) => setForm({ ...form, branch: val })}
                     options={t.options.branches}
                     placeholder={t.form.branchPlaceholder}
-                    onFocus={handleFieldInteraction}
                   />
                 </div>
 
@@ -447,7 +338,6 @@ export default function RegistrationPage() {
                       type="tel"
                       maxLength={10}
                       value={form.contactNo}
-                      onFocus={handleFieldInteraction}
                       onChange={(e) => {
                         const digitsOnly = e.target.value.replace(/\D/g, '');
                         setForm({ ...form, contactNo: digitsOnly });
@@ -470,7 +360,6 @@ export default function RegistrationPage() {
                     onChange={(val) => setForm({ ...form, gender: val })}
                     options={t.options.genders}
                     placeholder={t.form.genderPlaceholder}
-                    onFocus={handleFieldInteraction}
                   />
                 </div>
 
@@ -483,8 +372,8 @@ export default function RegistrationPage() {
                     required
                     type="email"
                     value={form.email}
-                    onFocus={handleFieldInteraction}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    onBlur={(e) => checkSubmissionStatus(e.target.value)}
                     placeholder={t.form.emailPlaceholder}
                     className="w-full p-4 rounded-2xl bg-[#e6edf5] neu-input text-[#0B1B3D] placeholder:text-[#475569]/40 outline-none text-sm font-medium"
                   />
@@ -500,7 +389,6 @@ export default function RegistrationPage() {
                     required
                     type="text"
                     value={form.linkedinId}
-                    onFocus={handleFieldInteraction}
                     onChange={(e) => setForm({ ...form, linkedinId: e.target.value })}
                     placeholder={t.form.linkedinPlaceholder}
                     className="w-full p-4 rounded-2xl bg-[#e6edf5] neu-input text-[#0B1B3D] placeholder:text-[#475569]/40 outline-none text-sm font-medium"
@@ -515,7 +403,6 @@ export default function RegistrationPage() {
                   <input
                     type="text"
                     value={form.githubId}
-                    onFocus={handleFieldInteraction}
                     onChange={(e) => setForm({ ...form, githubId: e.target.value })}
                     placeholder={t.form.githubPlaceholder}
                     className="w-full p-4 rounded-2xl bg-[#e6edf5] neu-input text-[#0B1B3D] placeholder:text-[#475569]/40 outline-none text-sm font-medium"
@@ -530,14 +417,13 @@ export default function RegistrationPage() {
                   <input
                     type="text"
                     value={form.instagramId}
-                    onFocus={handleFieldInteraction}
                     onChange={(e) => setForm({ ...form, instagramId: e.target.value })}
                     placeholder={t.form.instagramPlaceholder}
                     className="w-full p-4 rounded-2xl bg-[#e6edf5] neu-input text-[#0B1B3D] placeholder:text-[#475569]/40 outline-none text-sm font-medium"
                   />
                 </div>
 
-                {/* 9. Interest & Skills Dropdown */}
+                {/* 10. Interest & Skills Dropdown */}
                 <div className="space-y-2 md:col-span-2">
                   <label className="text-xs font-black text-[#0B1B3D] uppercase tracking-wider ml-1">
                     {t.form.interestsLabel} <span className="text-[#D90429]">*</span>
@@ -548,13 +434,11 @@ export default function RegistrationPage() {
                     onChange={(val) => setForm({ ...form, interests: val })}
                     options={t.options.interests}
                     placeholder={t.form.interestsPlaceholder}
-                    onFocus={handleFieldInteraction}
                   />
                   {form.interests === 'Other' && (
                     <input
                       type="text"
                       value={form.otherInterest}
-                      onFocus={handleFieldInteraction}
                       onChange={(e) => setForm({ ...form, otherInterest: e.target.value })}
                       placeholder={t.form.otherInterestPlaceholder}
                       className="w-full mt-2 p-4 rounded-2xl bg-[#e6edf5] neu-input text-[#0B1B3D] placeholder:text-[#475569]/40 outline-none text-sm font-medium"
@@ -586,14 +470,6 @@ export default function RegistrationPage() {
 
       {/* Footer */}
       <Footer t={t} />
-
-      {/* Google Auth Intercept Popup */}
-      <GoogleAuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        onSuccess={handleGoogleSuccess}
-        t={t}
-      />
 
       {/* Printable Modal */}
       {submittedData && (

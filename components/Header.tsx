@@ -8,11 +8,9 @@ interface HeaderProps {
   lang: Language;
   onToggleLang: () => void;
   t: TranslationSchema;
-  user: { email: string; name?: string; picture?: string } | null;
-  onSwitchAccount: () => void;
 }
 
-export default function Header({ lang, onToggleLang, t, user, onSwitchAccount }: HeaderProps) {
+export default function Header({ lang, onToggleLang, t }: HeaderProps) {
   return (
     <header className="w-full bg-[#e6edf5] border-b border-[#c2cfd6]/40 sticky top-0 z-40 backdrop-blur-md shadow-sm">
       
@@ -21,7 +19,7 @@ export default function Header({ lang, onToggleLang, t, user, onSwitchAccount }:
       {/* ========================================================================= */}
       <div className="block sm:hidden px-3 py-2.5">
         {/* Mobile Top Tier: Logo & Branding + Capsule Language Toggle */}
-        <div className="flex items-center justify-between gap-2 mb-2">
+        <div className="flex items-center justify-between gap-2">
           {/* Logo & Title */}
           <div className="flex items-center space-x-2.5 min-w-0">
             <div className="relative w-9 h-9 rounded-xl bg-[#e6edf5] p-1 flex items-center justify-center neu-card shadow-[3px_3px_6px_#c2cfd6,-3px_-3px_6px_#ffffff] shrink-0">
@@ -77,27 +75,6 @@ export default function Header({ lang, onToggleLang, t, user, onSwitchAccount }:
             </span>
           </button>
         </div>
-
-        {/* Mobile Bottom Tier: Dedicated Logged-In User Account Card */}
-        {user && (
-          <div className="flex items-center justify-between bg-[#e6edf5] px-3 py-1.5 rounded-xl text-xs font-semibold text-[#0B1B3D] neu-card shadow-[3px_3px_6px_#c2cfd6,-3px_-3px_6px_#ffffff] border border-white/50">
-            <div className="flex items-center space-x-2 min-w-0 flex-1">
-              {user.picture ? (
-                <img src={user.picture} alt="Avatar" className="w-5 h-5 rounded-full border border-[#0B1B3D]/20 shrink-0" />
-              ) : (
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />
-              )}
-              <span className="truncate text-[11px] font-bold text-[#0B1B3D]">{user.email}</span>
-            </div>
-            <button 
-              onClick={onSwitchAccount}
-              className="text-[#D90429] hover:underline font-extrabold text-[10px] uppercase tracking-wider cursor-pointer whitespace-nowrap pl-2 border-l border-[#0B1B3D]/15 ml-2"
-              title={t.header.switchAccount}
-            >
-              {t.header.switchAccount}
-            </button>
-          </div>
-        )}
       </div>
 
       {/* ========================================================================= */}
@@ -131,26 +108,8 @@ export default function Header({ lang, onToggleLang, t, user, onSwitchAccount }:
           </div>
         </div>
 
-        {/* Right Section: User Info + Switch Account + Neumorphic Capsule Language Toggle */}
+        {/* Right Section: Neumorphic Capsule Language Toggle */}
         <div className="flex items-center space-x-3">
-          {user && (
-            <div className="flex items-center space-x-2 bg-[#e6edf5] px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#0B1B3D] neu-card shadow-[4px_4px_8px_#c2cfd6,-4px_-4px_8px_#ffffff]">
-              {user.picture ? (
-                <img src={user.picture} alt="Avatar" className="w-5 h-5 rounded-full border border-[#0B1B3D]/20" />
-              ) : (
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-              )}
-              <span className="max-w-[140px] truncate text-xs font-medium">{user.email}</span>
-              <button 
-                onClick={onSwitchAccount}
-                className="text-[#D90429] hover:underline font-bold pl-2 border-l border-[#0B1B3D]/20 text-xs uppercase tracking-wider cursor-pointer"
-                title={t.header.switchAccount}
-              >
-                {t.header.switchAccount}
-              </button>
-            </div>
-          )}
-
           {/* Neumorphic Capsule Language Switcher */}
           <button
             type="button"
@@ -163,8 +122,8 @@ export default function Header({ lang, onToggleLang, t, user, onSwitchAccount }:
             <div 
               className={`absolute top-1 bottom-1 w-[50px] rounded-full neu-knob transition-all duration-300 ease-out flex items-center justify-center border border-white/60 shadow-[3px_3px_8px_#b5c3d4,-3px_-3px_8px_#ffffff] ${
                 lang === 'en' 
-                  ? 'left-1 bg-gradient-to-br from-[#0B1B3D] to-[#162B56] text-[#FFB703]' 
-                  : 'left-[calc(100%-54px)] bg-gradient-to-br from-[#D90429] to-[#9B001C] text-white'
+                  ? 'left-1 bg-[#0B1B3D] text-[#FFB703]' 
+                  : 'left-[calc(100%-54px)] bg-[#D90429] text-white'
               }`}
             >
               <span className="text-xs font-black tracking-wider uppercase">

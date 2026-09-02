@@ -7,16 +7,7 @@ export interface TranslationSchema {
     sessionTag: string;
     formTitle: string;
     formSubtitle: string;
-    loginRequiredNotice: string;
-    loggedInAs: string;
-    switchAccount: string;
     switchLang: string;
-  };
-  authModal: {
-    title: string;
-    subtitle: string;
-    googleButton: string;
-    close: string;
   };
   form: {
     enrollmentNoLabel: string;
@@ -61,7 +52,6 @@ export interface TranslationSchema {
     errorPhonePrefix: string;
     errorRequired: string;
     errorGeneral: string;
-    switchAccountBtn: string;
     downloadFormBtn: string;
     viewFormBtn: string;
   };
@@ -81,16 +71,7 @@ export const translations: Record<Language, TranslationSchema> = {
       sessionTag: 'Session 2026-27',
       formTitle: 'Tech Unleash 4.0 Registration Form',
       formSubtitle: 'Join us at Tech Unleash 4.0 by GDGoC IET DAVV to innovate, build, and excel!',
-      loginRequiredNotice: 'Please sign in with Google to fill out the registration form.',
-      loggedInAs: 'Logged in as:',
-      switchAccount: 'Switch Account',
       switchLang: 'हिंदी',
-    },
-    authModal: {
-      title: 'Google Sign-In Required',
-      subtitle: 'To fill out the Tech Unleash 4.0 Registration Form, please sign in with your Google Account.',
-      googleButton: 'Continue with Google',
-      close: 'Close',
     },
     form: {
       enrollmentNoLabel: 'Enrollment Number',
@@ -154,14 +135,13 @@ export const translations: Record<Language, TranslationSchema> = {
     },
     status: {
       alreadySubmittedTitle: 'Response Recorded',
-      alreadySubmittedMsg: 'Your response has been recorded. Thank you! You have already submitted a form with this Google account.',
+      alreadySubmittedMsg: 'Your response has been recorded. Thank you! You have already submitted a form with this email address.',
       successTitle: 'Thank You!',
       successMsg: "Your response has been recorded thank you! You'll get information soon.",
       errorCollegeEmail: 'Please enter a valid college email address.',
       errorPhonePrefix: 'Contact number must be a 10-digit number with +91 prefix.',
       errorRequired: 'Please fill in all mandatory fields correctly.',
       errorGeneral: 'An error occurred while submitting your registration. Please try again.',
-      switchAccountBtn: 'Switch Google Account',
       downloadFormBtn: 'Download / Print Application Form',
       viewFormBtn: 'View Application Form',
     },
@@ -179,16 +159,7 @@ export const translations: Record<Language, TranslationSchema> = {
       sessionTag: 'सत्र 2026-27',
       formTitle: 'टेक अनलीश 4.0 पंजीकरण फॉर्म',
       formSubtitle: 'GDGoC IET DAVV के Tech Unleash 4.0 में हमारे साथ जुड़ें!',
-      loginRequiredNotice: 'पंजीकरण फॉर्म भरने के लिए कृपया Google के साथ साइन इन करें।',
-      loggedInAs: 'लॉग इन खाते:',
-      switchAccount: 'खाता बदलें',
       switchLang: 'English',
-    },
-    authModal: {
-      title: 'Google साइन-इन आवश्यक है',
-      subtitle: 'Tech Unleash 4.0 पंजीकरण फॉर्म भरने के लिए, कृपया अपने Google खाते से साइन इन करें।',
-      googleButton: 'Google के साथ आगे बढ़ें',
-      close: 'बंद करें',
     },
     form: {
       enrollmentNoLabel: 'नामांकन संख्या (Enrollment No.)',
@@ -252,14 +223,13 @@ export const translations: Record<Language, TranslationSchema> = {
     },
     status: {
       alreadySubmittedTitle: 'प्रतिक्रिया दर्ज की गई',
-      alreadySubmittedMsg: 'आपकी प्रतिक्रिया दर्ज कर ली गई है। धन्यवाद! आप इस Google खाते से पहले ही फॉर्म सबमिट कर चुके हैं।',
+      alreadySubmittedMsg: 'आपकी प्रतिक्रिया दर्ज कर ली गई है। धन्यवाद! आप इस ईमेल पते से पहले ही फॉर्म सबमिट कर चुके हैं।',
       successTitle: 'धन्यवाद!',
       successMsg: 'आपकी प्रतिक्रिया दर्ज कर ली गई है। धन्यवाद! आपको जल्द ही जानकारी मिलेगी।',
       errorCollegeEmail: 'कृपया एक मान्य कॉलेज ईमेल पता दर्ज करें।',
       errorPhonePrefix: 'संपर्क नंबर +91 प्रीफिक्स के साथ 10 अंकों का होना चाहिए।',
       errorRequired: 'कृपया सभी अनिवार्य फ़ील्ड सही ढंग से भरें।',
       errorGeneral: 'आपका पंजीकरण जमा करते समय एक त्रुटि हुई। कृपया पुनः प्रयास करें।',
-      switchAccountBtn: 'गूगल खाता बदलें',
       downloadFormBtn: 'आवेदन पत्र डाउनलोड / प्रिंट करें',
       viewFormBtn: 'आवेदन पत्र देखें',
     },
