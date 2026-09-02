@@ -69,6 +69,7 @@ export interface TranslationSchema {
     copyright: string;
     contactPrefix: string;
     adminEmail: string;
+    credits: string;
   };
 }
 
@@ -168,6 +169,7 @@ export const translations: Record<Language, TranslationSchema> = {
       copyright: 'All rights reserved to GDGoC IET DAVV.',
       contactPrefix: 'If you have any query, contact us at',
       adminEmail: 'gdgoc@ietdavv.edu.in',
+      credits: 'Original Creator: Utkarsh Mandloi',
     },
   },
   hi: {
@@ -265,6 +267,7 @@ export const translations: Record<Language, TranslationSchema> = {
       copyright: 'सर्वाधिकार सुरक्षित - गूगल डेवलपर ग्रुप्स ऑन कैंपस, आई.ई.टी. डी.ए.वी.वी.',
       contactPrefix: 'यदि आपके पास कोई प्रश्न है, तो हमसे संपर्क करें:',
       adminEmail: 'gdgoc@ietdavv.edu.in',
+      credits: 'मूल रचयिता: उत्कर्ष मंडलोई (Utkarsh Mandloi)',
     },
   },
 };

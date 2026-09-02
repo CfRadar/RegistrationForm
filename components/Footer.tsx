@@ -23,6 +23,9 @@ export default function Footer({ t }: FooterProps) {
             {t.footer.adminEmail}
           </a>
         </p>
+        <p className="text-[11px] sm:text-xs font-semibold text-[#0B1B3D]/70 pt-1 tracking-wide">
+          {t.footer.credits}
+        </p>
       </div>
     </footer>
   );
