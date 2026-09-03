@@ -220,9 +220,9 @@ export default function ApplicationFormModal({ isOpen, onClose, data }: Applicat
                 </span>
               </div>
 
-              {/* 6. College Email ID */}
+              {/* 6. Email ID */}
               <div className="flex items-baseline border-b border-gray-300 pb-1.5">
-                <span className="font-bold min-w-[180px] text-black">6. College Email ID:</span>
+                <span className="font-bold min-w-[180px] text-black">6. Email ID:</span>
                 <span className="flex-1 font-semibold text-black">
                   {data.email || 'N/A'}
                 </span>
