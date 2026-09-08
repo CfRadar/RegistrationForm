@@ -16,6 +16,10 @@ export interface TranslationSchema {
     namePlaceholder: string;
     branchLabel: string;
     branchPlaceholder: string;
+    sectionLabel: string;
+    sectionPlaceholder: string;
+    yearLabel: string;
+    yearPlaceholder: string;
     contactLabel: string;
     contactPlaceholder: string;
     contactNote: string;
@@ -40,6 +44,8 @@ export interface TranslationSchema {
   };
   options: {
     branches: { value: string; label: string }[];
+    sections: { value: string; label: string }[];
+    years: { value: string; label: string }[];
     genders: { value: string; label: string }[];
     interests: { value: string; label: string }[];
   };
@@ -80,6 +86,10 @@ export const translations: Record<Language, TranslationSchema> = {
       namePlaceholder: 'Enter your full name',
       branchLabel: 'Branch',
       branchPlaceholder: 'Select your branch',
+      sectionLabel: 'Section',
+      sectionPlaceholder: 'Select section (A / B)',
+      yearLabel: 'Year of Study',
+      yearPlaceholder: 'Select your year',
       contactLabel: 'Contact Number (with +91)',
       contactPlaceholder: '9876543210',
       contactNote: 'Format: Must start with +91 followed by 10 digits',
@@ -98,7 +108,7 @@ export const translations: Record<Language, TranslationSchema> = {
       interestsPlaceholder: 'Select your primary interest/skill',
       otherInterestLabel: 'Specify Other Skill / Interest',
       otherInterestPlaceholder: 'Enter your skill or interest...',
-      submitButton: 'Submit Registration Form',
+      submitButton: 'Submit Tech Unleash 4.0 Registration Form',
       submittingButton: 'Recording Response...',
       requiredField: 'This field is required',
     },
@@ -112,8 +122,19 @@ export const translations: Record<Language, TranslationSchema> = {
         { value: 'Mech', label: 'Mechanical (Mech)' },
         { value: 'Civil', label: 'Civil' },
         { value: 'CSBS', label: 'Computer Science & Business System (CSBS)' },
+        { value: 'IP', label: 'Industrial & Production (IP)' },
         { value: 'B.Design', label: 'Bachelor of Design (B.Design)' },
         { value: 'Other', label: 'Other' },
+      ],
+      sections: [
+        { value: 'A', label: 'Section A' },
+        { value: 'B', label: 'Section B' },
+      ],
+      years: [
+        { value: '1st Year', label: '1st Year (First Year)' },
+        { value: '2nd Year', label: '2nd Year (Second Year)' },
+        { value: '3rd Year', label: '3rd Year (Third Year)' },
+        { value: '4th Year', label: '4th Year (Fourth Year)' },
       ],
       genders: [
         { value: 'Male', label: 'Male' },
@@ -168,6 +189,10 @@ export const translations: Record<Language, TranslationSchema> = {
       namePlaceholder: 'अपना पूरा नाम दर्ज करें',
       branchLabel: 'शाखा (Branch)',
       branchPlaceholder: 'अपनी शाखा चुनें',
+      sectionLabel: 'अनुभाग (Section)',
+      sectionPlaceholder: 'अनुभाग चुनें (A / B)',
+      yearLabel: 'वर्ष (Year of Study)',
+      yearPlaceholder: 'वर्ष चुनें',
       contactLabel: 'संपर्क नंबर (+91 के साथ)',
       contactPlaceholder: '9876543210',
       contactNote: 'प्रारूप: +91 के साथ 10 अंकों का मोबाइल नंबर होना चाहिए',
@@ -186,7 +211,7 @@ export const translations: Record<Language, TranslationSchema> = {
       interestsPlaceholder: 'अपनी प्राथमिक अभिरुचि/कौशल चुनें',
       otherInterestLabel: 'अन्य कौशल / अभिरुचि दर्ज करें',
       otherInterestPlaceholder: 'अपना कौशल या अभिरुचि दर्ज करें...',
-      submitButton: 'पंजीकरण फॉर्म सबमिट करें',
+      submitButton: 'टेक अनलीश पंजीकरण फॉर्म सबमिट करें',
       submittingButton: 'प्रतिक्रिया दर्ज की जा रही है...',
       requiredField: 'यह क्षेत्र अनिवार्य है',
     },
@@ -200,8 +225,19 @@ export const translations: Record<Language, TranslationSchema> = {
         { value: 'Mech', label: 'मैकेनिकल (Mech)' },
         { value: 'Civil', label: 'सिविल (Civil)' },
         { value: 'CSBS', label: 'कंप्यूटर साइंस एंड बिजनेस सिस्टम (CSBS)' },
+        { value: 'IP', label: 'इंडस्ट्रियल एंड प्रोडक्शन (IP)' },
         { value: 'B.Design', label: 'बैचलर ऑफ डिजाइन (B.Design)' },
         { value: 'Other', label: 'अन्य' },
+      ],
+      sections: [
+        { value: 'A', label: 'अनुभाग A (Section A)' },
+        { value: 'B', label: 'अनुभाग B (Section B)' },
+      ],
+      years: [
+        { value: '1st Year', label: 'प्रथम वर्ष (1st Year)' },
+        { value: '2nd Year', label: 'द्वितीय वर्ष (2nd Year)' },
+        { value: '3rd Year', label: 'तृतीय वर्ष (3rd Year)' },
+        { value: '4th Year', label: 'चतुर्थ वर्ष (4th Year)' },
       ],
       genders: [
         { value: 'Male', label: 'पुरुष' },
