@@ -21,6 +21,8 @@ export default function RegistrationPage() {
     enrollmentNo: '',
     name: '',
     branch: '',
+    section: '',
+    year: '',
     contactNo: '',
     gender: '',
     email: '',
@@ -34,8 +36,18 @@ export default function RegistrationPage() {
   const t = translations[lang];
   const autosaveTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Load saved local draft on mount if available
+  // Load saved local draft & check if user previously submitted
   useEffect(() => {
+    const localSubmitted = localStorage.getItem('gdgoc_submitted_form_data');
+    if (localSubmitted) {
+      try {
+        const parsed = JSON.parse(localSubmitted);
+        setSubmittedData(parsed);
+        setStatus('already_submitted');
+        return;
+      } catch (e) {}
+    }
+
     const localDraft = localStorage.getItem('gdgoc_draft_form');
     if (localDraft) {
       try {
@@ -43,6 +55,7 @@ export default function RegistrationPage() {
         setForm((prev) => ({ ...prev, ...parsed }));
       } catch (e) {}
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Debounced local autosave
@@ -85,6 +98,11 @@ export default function RegistrationPage() {
     e.preventDefault();
     setErrorMessage('');
 
+    if (!form.year || !form.section) {
+      setErrorMessage(t.status.errorRequired);
+      return;
+    }
+
     // Phone number digit validation
     const cleanPhone = form.contactNo.replace(/\D/g, '');
     if (cleanPhone.length !== 10) {
@@ -115,6 +133,8 @@ export default function RegistrationPage() {
           enrollmentNo: form.enrollmentNo.trim(),
           name: form.name.trim(),
           branch: form.branch,
+          section: form.section,
+          year: form.year,
           contactNo: fullContactNo,
           gender: form.gender,
           email: form.email.trim(),
@@ -132,6 +152,8 @@ export default function RegistrationPage() {
           enrollmentNo: form.enrollmentNo.trim(),
           name: form.name.trim(),
           branch: form.branch,
+          section: form.section,
+          year: form.year,
           contactNo: fullContactNo,
           gender: form.gender,
           email: form.email.trim(),
@@ -142,6 +164,7 @@ export default function RegistrationPage() {
         };
         setStatus('success');
         setSubmittedData(finalSubmissionData);
+        localStorage.setItem('gdgoc_submitted_form_data', JSON.stringify(finalSubmissionData));
         localStorage.removeItem('gdgoc_draft_form');
       } else if (res.status === 409 || data.error === 'ALREADY_SUBMITTED') {
         setStatus('already_submitted');
@@ -321,6 +344,34 @@ export default function RegistrationPage() {
                     onChange={(val) => setForm({ ...form, branch: val })}
                     options={t.options.branches}
                     placeholder={t.form.branchPlaceholder}
+                  />
+                </div>
+
+                {/* 4. Section Dropdown */}
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-[#0B1B3D] uppercase tracking-wider ml-1">
+                    {t.form.sectionLabel} <span className="text-[#D90429]">*</span>
+                  </label>
+                  <CustomSelect
+                    required
+                    value={form.section}
+                    onChange={(val) => setForm({ ...form, section: val })}
+                    options={t.options.sections}
+                    placeholder={t.form.sectionPlaceholder}
+                  />
+                </div>
+
+                {/* 5. Year of Study Dropdown */}
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-[#0B1B3D] uppercase tracking-wider ml-1">
+                    {t.form.yearLabel} <span className="text-[#D90429]">*</span>
+                  </label>
+                  <CustomSelect
+                    required
+                    value={form.year}
+                    onChange={(val) => setForm({ ...form, year: val })}
+                    options={t.options.years}
+                    placeholder={t.form.yearPlaceholder}
                   />
                 </div>
 
