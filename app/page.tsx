@@ -4,14 +4,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import NssLogoLoader from '@/components/NssLogoLoader';
 import CustomSelect from '@/components/CustomSelect';
 import ApplicationFormModal, { ApplicationFormData } from '@/components/ApplicationFormModal';
 import { translations, Language } from '@/lib/translations';
 
 export default function RegistrationPage() {
   const [lang, setLang] = useState<Language>('en');
-  const [status, setStatus] = useState<'idle' | 'checking' | 'submitting' | 'success' | 'already_submitted'>('idle');
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'already_submitted'>('idle');
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [draftSaved, setDraftSaved] = useState(false);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
@@ -71,7 +71,7 @@ export default function RegistrationPage() {
 
   const checkSubmissionStatus = async (emailToCheck: string) => {
     if (!emailToCheck || !emailToCheck.includes('@')) return;
-    setStatus('checking');
+    setIsCheckingEmail(true);
     try {
       const res = await fetch(`/api/check-submission?email=${encodeURIComponent(emailToCheck)}`);
       const data = await res.json();
@@ -81,12 +81,11 @@ export default function RegistrationPage() {
         if (data.submission) {
           setSubmittedData(data.submission);
         }
-        return;
       }
-      setStatus('idle');
     } catch (err) {
       console.error('Failed to check submission', err);
-      setStatus('idle');
+    } finally {
+      setIsCheckingEmail(false);
     }
   };
 
@@ -220,10 +219,8 @@ export default function RegistrationPage() {
           </p>
         </div>
 
-        {/* Animated GDGoC Logo Loader during checking / initial fetch */}
-        {status === 'checking' ? (
-          <NssLogoLoader t={t} />
-        ) : status === 'success' ? (
+        {status === 'success' ? (
+          /* Status Screen: Success */
           /* Status Screen: Success */
           <div className="bg-[#e6edf5] rounded-3xl p-6 sm:p-12 text-center neu-card shadow-[16px_16px_36px_#c2cfd6,-16px_-16px_36px_#ffffff] border border-white/80">
             <div className="w-16 h-16 sm:w-20 sm:h-20 bg-emerald-500/10 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 neu-knob">
@@ -416,9 +413,17 @@ export default function RegistrationPage() {
 
                 {/* 6. College Email ID */}
                 <div className="space-y-2">
-                  <label className="text-xs font-black text-[#0B1B3D] uppercase tracking-wider ml-1">
-                    {t.form.emailLabel} <span className="text-[#D90429]">*</span>
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-black text-[#0B1B3D] uppercase tracking-wider ml-1">
+                      {t.form.emailLabel} <span className="text-[#D90429]">*</span>
+                    </label>
+                    {isCheckingEmail && (
+                      <span className="text-[11px] font-bold text-blue-600 flex items-center space-x-1.5 animate-pulse">
+                        <span className="w-2 h-2 rounded-full bg-blue-600 animate-ping" />
+                        <span>Verifying...</span>
+                      </span>
+                    )}
+                  </div>
                   <input
                     required
                     type="email"
