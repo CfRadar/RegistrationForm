@@ -7,6 +7,8 @@ export interface ApplicationFormData {
   enrollmentNo: string;
   name: string;
   branch: string;
+  section?: string;
+  year?: string;
   contactNo: string;
   gender: string;
   email: string;
@@ -204,57 +206,73 @@ export default function ApplicationFormModal({ isOpen, onClose, data }: Applicat
                 </span>
               </div>
 
-              {/* 4. Contact Number */}
+              {/* 4. Section */}
               <div className="flex items-baseline border-b border-gray-300 pb-1.5">
-                <span className="font-bold min-w-[180px] text-black">4. Contact Number:</span>
+                <span className="font-bold min-w-[180px] text-black">4. Section:</span>
+                <span className="flex-1 font-semibold text-black uppercase">
+                  {data.section ? `Section ${data.section}` : 'N/A'}
+                </span>
+              </div>
+
+              {/* 5. Year of Study */}
+              <div className="flex items-baseline border-b border-gray-300 pb-1.5">
+                <span className="font-bold min-w-[180px] text-black">5. Year of Study:</span>
+                <span className="flex-1 font-semibold text-black">
+                  {data.year || 'N/A'}
+                </span>
+              </div>
+
+              {/* 6. Contact Number */}
+              <div className="flex items-baseline border-b border-gray-300 pb-1.5">
+                <span className="font-bold min-w-[180px] text-black">6. Contact Number:</span>
                 <span className="flex-1 font-semibold text-black">
                   {formattedPhone}
                 </span>
               </div>
 
-              {/* 5. Gender */}
+              {/* 7. Gender */}
               <div className="flex items-baseline border-b border-gray-300 pb-1.5">
-                <span className="font-bold min-w-[180px] text-black">5. Gender:</span>
+                <span className="font-bold min-w-[180px] text-black">7. Gender:</span>
                 <span className="flex-1 font-semibold text-black">
                   {data.gender || 'N/A'}
                 </span>
               </div>
 
-              {/* 6. Email ID */}
+              {/* 8. Email ID */}
               <div className="flex items-baseline border-b border-gray-300 pb-1.5">
-                <span className="font-bold min-w-[180px] text-black">6. Email ID:</span>
+                <span className="font-bold min-w-[180px] text-black">8. Email ID:</span>
                 <span className="flex-1 font-semibold text-black">
                   {data.email || 'N/A'}
                 </span>
               </div>
 
-              {/* 7. LinkedIn ID */}
+              {/* 9. LinkedIn ID */}
               <div className="flex items-baseline border-b border-gray-300 pb-1.5">
-                <span className="font-bold min-w-[180px] text-black">7. LinkedIn ID / Profile:</span>
+                <span className="font-bold min-w-[180px] text-black">9. LinkedIn ID / Profile:</span>
                 <span className="flex-1 font-semibold text-blue-700 underline break-all">
                   {data.linkedinId || 'N/A'}
                 </span>
               </div>
 
-              {/* 8. GitHub ID */}
+              {/* 10. GitHub ID */}
               <div className="flex items-baseline border-b border-gray-300 pb-1.5">
-                <span className="font-bold min-w-[180px] text-black">8. GitHub ID (if any):</span>
+                <span className="font-bold min-w-[180px] text-black">10. GitHub ID (if any):</span>
                 <span className="flex-1 font-semibold text-black break-all">
                   {data.githubId || 'N/A (Not Provided)'}
                 </span>
               </div>
 
-              {/* 9. Instagram ID */}
+              {/* 11. Instagram ID */}
               <div className="flex items-baseline border-b border-gray-300 pb-1.5">
-                <span className="font-bold min-w-[180px] text-black">9. Instagram ID (if any):</span>
+                <span className="font-bold min-w-[180px] text-black">11. Instagram ID (if any):</span>
                 <span className="flex-1 font-semibold text-black break-all">
                   {data.instagramId || 'N/A (Not Provided)'}
                 </span>
               </div>
 
-              {/* 10. Interest & Skills */}
+              {/* 12. Interest & Skills */}
               <div className="flex items-baseline border-b border-gray-300 pb-1.5">
-                <span className="font-bold min-w-[180px] text-black">10. Interest & Skills:</span>
+                <span className="font-bold min-w-[180px] text-black">12. Interest & Skills:</span>
                 <span className="flex-1 font-semibold text-black">
                   {data.interests || 'N/A'}
                 </span>
