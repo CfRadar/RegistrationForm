@@ -89,6 +89,7 @@ export async function GET(req: Request) {
         year: getCol(['year']),
         category: getCol(['category']),
         branch: getCol(['branch']),
+        section: getCol(['section', 'sec']),
         fatherName: getCol(['fathersname', 'fathername']),
         motherName: getCol(['mothersname', 'mothername']),
         dob: getCol(['dob', 'dateofbirth']),
