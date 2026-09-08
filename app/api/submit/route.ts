@@ -12,6 +12,8 @@ const DEFAULT_HEADERS = [
   'Enrollment Number',
   'Full Name',
   'Branch',
+  'Section',
+  'Year',
   'Contact Number',
   'Gender',
   'College Email ID',
@@ -20,6 +22,23 @@ const DEFAULT_HEADERS = [
   'Instagram ID',
   'Interest Skills',
 ];
+
+// In-memory rate limiter per IP (Max 5 requests per minute)
+const ipRateMap = new Map<string, number[]>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const windowMs = 60 * 1000; // 1 minute
+  const maxRequests = 5;
+
+  const timestamps = (ipRateMap.get(ip) || []).filter((t) => now - t < windowMs);
+  if (timestamps.length >= maxRequests) {
+    return true;
+  }
+  timestamps.push(now);
+  ipRateMap.set(ip, timestamps);
+  return false;
+}
 
 function normalizeHeader(header: string): string {
   return header.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -40,12 +59,23 @@ async function getAccessToken() {
 
 export async function POST(req: Request) {
   try {
+    // 0. IP Rate Limiting Check
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || req.headers.get('x-real-ip') || '127.0.0.1';
+    if (isRateLimited(ip)) {
+      return NextResponse.json(
+        { success: false, error: 'Too many requests. Please wait a minute before trying again.' },
+        { status: 429 }
+      );
+    }
+
     const body = await req.json();
     const {
       googleEmail,
       enrollmentNo,
       name,
       branch,
+      section,
+      year,
       contactNo,
       gender,
       email,
@@ -56,7 +86,7 @@ export async function POST(req: Request) {
     } = body;
 
     // Validate mandatory fields
-    if (!enrollmentNo || !name || !branch || !contactNo || !gender || !email || !linkedinId || !interests) {
+    if (!enrollmentNo || !name || !branch || !section || !year || !contactNo || !gender || !email || !linkedinId || !interests) {
       return NextResponse.json(
         { success: false, error: 'Missing mandatory fields' },
         { status: 400 }
@@ -141,23 +171,31 @@ export async function POST(req: Request) {
       }
     }
 
-    // 3. Dynamic Duplicate email check by finding column indices by header name
+    // 3. Dynamic Duplicate check by finding column indices for Email AND Enrollment Number
     let googleEmailColIdx = sheetHeaders.findIndex((h) => normalizeHeader(h) === 'googleemail');
     let emailAddressColIdx = sheetHeaders.findIndex((h) => {
       const norm = normalizeHeader(h);
       return norm === 'collegeemailid' || norm === 'emailaddress' || norm === 'email';
     });
+    let enrollmentColIdx = sheetHeaders.findIndex((h) => {
+      const norm = normalizeHeader(h);
+      return norm === 'enrollmentnumber' || norm === 'enrollmentno' || norm === 'enrollment';
+    });
 
     if (googleEmailColIdx === -1) googleEmailColIdx = 2; // Column C fallback
-    if (emailAddressColIdx === -1) emailAddressColIdx = 8; // Column I fallback
+    if (enrollmentColIdx === -1) enrollmentColIdx = 3; // Column D fallback
+    if (emailAddressColIdx === -1) emailAddressColIdx = 9; // Column J fallback
 
     const targetGoogleEmail = (googleEmail || email).toLowerCase().trim();
+    const targetEnrollment = enrollmentNo.toLowerCase().trim();
     const existingSubmissions = values.slice(1); // Exclude header row
 
     const isDuplicate = existingSubmissions.some((row) => {
       const gEmail = row[googleEmailColIdx]?.toString().trim().toLowerCase();
       const fEmail = row[emailAddressColIdx]?.toString().trim().toLowerCase();
-      return gEmail === targetGoogleEmail || fEmail === targetGoogleEmail;
+      const enrNo = row[enrollmentColIdx]?.toString().trim().toLowerCase();
+
+      return gEmail === targetGoogleEmail || fEmail === targetGoogleEmail || (enrNo && enrNo === targetEnrollment);
     });
 
     if (isDuplicate) {
@@ -197,6 +235,12 @@ export async function POST(req: Request) {
       'name': name.trim(),
 
       'branch': branch.trim(),
+
+      'section': section ? section.trim() : 'N/A',
+      'sec': section ? section.trim() : 'N/A',
+
+      'year': year.trim(),
+      'yearofstudy': year.trim(),
 
       'contactnumber': formattedContactNo,
       'contactno': formattedContactNo,
