@@ -16,8 +16,8 @@ export default function NssLogoLoader({ t, message }: NssLogoLoaderProps) {
       {/* GDGoC Stacked Dark Logo Container with Subtle Pulse */}
       <div className="relative w-44 h-44 sm:w-52 sm:h-52 flex items-center justify-center mb-6 p-4 rounded-3xl bg-[#e6edf5] neu-card shadow-[8px_8px_16px_#c2cfd6,-8px_-8px_16px_#ffffff] animate-pulse">
         <Image
-          src="/Copy of GDG On Campus - Stacked - Dark.png"
-          alt="GDGoC Logo Loader"
+          src="/tech.png"
+          alt="Tech Unleash 4.0"
           width={180}
           height={180}
           className="object-contain"

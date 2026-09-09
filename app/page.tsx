@@ -192,13 +192,13 @@ export default function RegistrationPage() {
         
         {/* Banner Section */}
         <div className="text-center mb-8 sm:mb-10">
-          <div className="inline-block p-4 sm:p-5 rounded-3xl bg-[#e6edf5] neu-card shadow-[10px_10px_20px_#c2cfd6,-10px_-10px_20px_#ffffff] mb-5">
+          <div className="w-full min-h-56 sm:min-h-72 flex items-center justify-center mb-5">
             <Image
-              src="/Copy of GDG On Campus - Stacked - Dark.png"
-              alt="GDGoC Logo"
-              width={96}
-              height={96}
-              className="object-contain w-16 h-16 sm:w-24 sm:h-24 mx-auto"
+              src="/tech.png"
+              alt="Tech Unleash 4.0"
+              width={180}
+              height={180}
+              className="object-contain w-82 h-82 sm:w-102 sm:h-102"
               priority
             />
           </div>
@@ -244,7 +244,7 @@ export default function RegistrationPage() {
               <span>{t.status.downloadFormBtn}</span>
             </button>
             <div className="p-4 rounded-2xl bg-[#e6edf5] neu-input text-xs font-bold text-[#0B1B3D] max-w-xs mx-auto">
-              GDGoC (Google Developer Groups on Campus), IET DAVV
+               (Tech-Unleash 4.0 Registration form)
             </div>
           </div>
         ) : status === 'already_submitted' ? (

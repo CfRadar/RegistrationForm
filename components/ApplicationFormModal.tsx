@@ -146,8 +146,8 @@ export default function ApplicationFormModal({ isOpen, onClose, data }: Applicat
               {/* Left GDGoC Emblem */}
               <div className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 flex items-center justify-center">
                 <Image
-                  src="/Copy of GDG On Campus - Stacked - Dark.png"
-                  alt="GDGoC Emblem"
+                  src="/tech.png"
+                  alt="Tech Unleash 4.0"
                   width={72}
                   height={72}
                   className="object-contain w-14 h-14 sm:w-18 sm:h-18"

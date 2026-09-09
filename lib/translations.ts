@@ -72,7 +72,7 @@ export interface TranslationSchema {
 export const translations: Record<Language, TranslationSchema> = {
   en: {
     header: {
-      orgTitle: 'GOOGLE DEVELOPER GROUPS ON CAMPUS (GDGoC)',
+      orgTitle: 'Tech Unleash 4.0 Registration Form',
       orgSubtitle: 'IET DAVV, Indore',
       sessionTag: 'Session 2026-27',
       formTitle: 'Tech Unleash 4.0 Registration Form',
@@ -175,7 +175,7 @@ export const translations: Record<Language, TranslationSchema> = {
   },
   hi: {
     header: {
-      orgTitle: 'गूगल डेवलपर ग्रुप्स ऑन कैंपस (GDGoC)',
+      orgTitle: 'Tech Unleash 4.0 Registration Form',
       orgSubtitle: 'आई.ई.टी. डी.ए.वी.वी., इंदौर',
       sessionTag: 'सत्र 2026-27',
       formTitle: 'टेक अनलीश 4.0 पंजीकरण फॉर्म',

@@ -95,7 +95,7 @@ export default function Header({ lang, onToggleLang, t }: HeaderProps) {
           </div>
           <div>
             <h1 className="text-base font-black text-[#0B1B3D] tracking-wider uppercase leading-tight">
-              {t.header.orgTitle}
+              GDGoC IET DAVV
             </h1>
             <div className="flex items-center gap-2">
               <p className="text-xs text-[#D90429] font-bold tracking-wide">

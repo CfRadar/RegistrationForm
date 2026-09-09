@@ -17,10 +17,10 @@ export const metadata: Metadata = {
   description: "Official Google Developer Groups on Campus (GDGoC) Tech Unleash 4.0 Registration Form for Institute of Engineering & Technology, DAVV Indore (Session 2026-27).",
   icons: {
     icon: [
-      { url: '/gdgoc_logo.png?v=3', type: 'image/png' },
+      { url: '/tech.png', type: 'image/png' },
     ],
-    shortcut: '/gdgoc_logo.png?v=3',
-    apple: '/gdgoc_logo.png?v=3',
+    shortcut: '/tech.png',
+    apple: '/tech.png',
   },
 };
 
@@ -32,9 +32,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/gdgoc_logo.png?v=3" type="image/png" sizes="any" />
-        <link rel="shortcut icon" href="/gdgoc_logo.png?v=3" />
-        <link rel="apple-touch-icon" href="/gdgoc_logo.png?v=3" />
+        <link rel="icon" href="/tech.png" type="image/png" sizes="any" />
+        <link rel="shortcut icon" href="/tech.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/tech.png" type="image/png" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[#e6edf5] text-[#0B1B3D] selection:bg-[#0B1B3D] selection:text-white`}
