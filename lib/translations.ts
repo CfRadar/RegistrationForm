@@ -80,8 +80,8 @@ export const translations: Record<Language, TranslationSchema> = {
       switchLang: 'हिंदी',
     },
     form: {
-      enrollmentNoLabel: 'Enrollment Number',
-      enrollmentNoPlaceholder: 'e.g. DE24101',
+      enrollmentNoLabel: 'Roll Number',
+      enrollmentNoPlaceholder: 'e.g. 26I1143',
       nameLabel: 'Full Name',
       namePlaceholder: 'Enter your full name',
       branchLabel: 'Branch',
