@@ -184,7 +184,7 @@ export default function ApplicationFormModal({ isOpen, onClose, data }: Applicat
               
               {/* 1. Enrollment Number */}
               <div className="flex items-baseline border-b border-gray-300 pb-1.5">
-                <span className="font-bold min-w-[180px] text-black">1. Enrollment Number:</span>
+                <span className="font-bold min-w-[180px] text-black">1. Roll Number:</span>
                 <span className="flex-1 font-semibold text-black uppercase tracking-wider">
                   {data.enrollmentNo || 'N/A'}
                 </span>
