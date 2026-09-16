@@ -124,6 +124,9 @@ export const translations: Record<Language, TranslationSchema> = {
         { value: 'CSBS', label: 'Computer Science & Business System (CSBS)' },
         { value: 'IP', label: 'Industrial & Production (IP)' },
         { value: 'B.Design', label: 'Bachelor of Design (B.Design)' },
+        { value: 'Mtech IIPS', label: 'MTech Integrated IIPS' },
+        { value: 'MCA IIPS', label: 'MCA Integrated IIPS' },
+        { value: 'Mtech SDSF', label: 'MTech Integrated SDSF' },
         { value: 'Other', label: 'Other' },
       ],
       sections: [
