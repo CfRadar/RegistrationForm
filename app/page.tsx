@@ -442,7 +442,6 @@ export default function RegistrationPage() {
                     {t.form.linkedinLabel} <span className="text-[#D90429]">*</span>
                   </label>
                   <input
-                    required
                     type="text"
                     value={form.linkedinId}
                     onChange={(e) => setForm({ ...form, linkedinId: e.target.value })}
