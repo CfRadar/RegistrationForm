@@ -439,7 +439,7 @@ export default function RegistrationPage() {
                 {/* 7. LinkedIn ID */}
                 <div className="space-y-2">
                   <label className="text-xs font-black text-[#0B1B3D] uppercase tracking-wider ml-1">
-                    {t.form.linkedinLabel} <span className="text-[#D90429]"></span>
+                    {t.form.linkedinLabel} <span className="text-[#D90429]">*</span>
                   </label>
                   <input
                     type="text"
